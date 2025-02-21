@@ -1,9 +1,8 @@
 package com.jonatanbortolon.flutter_android_developer_mode
 
-import androidx.annotation.NonNull
-
 import android.content.Context
 import android.provider.Settings
+import androidx.annotation.NonNull
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
@@ -40,18 +39,18 @@ class FlutterAndroidDeveloperModePlugin: FlutterPlugin, MethodCallHandler {
     channel.setMethodCallHandler(null)
   }
 
-  @android.annotation.TargetApi(17)
   private fun isDevMode(): Boolean {
-    return when {
-      Integer.valueOf(android.os.Build.VERSION.SDK) == 16 -> {
-        Settings.Secure.getInt(context.contentResolver,
-          Settings.Secure.DEVELOPMENT_SETTINGS_ENABLED, 0) != 0
-      }
-      Integer.valueOf(android.os.Build.VERSION.SDK) >= 17 -> {
-        Settings.Secure.getInt(context.contentResolver,
-          Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 0) != 0
-      }
-      else -> false
+    context?.let {
+        return when {
+            android.os.Build.VERSION.SDK_INT == 16 -> {
+                Settings.Secure.getInt(it.contentResolver, Settings.Secure.DEVELOPMENT_SETTINGS_ENABLED, 0) != 0
+            }
+            android.os.Build.VERSION.SDK_INT >= 17 -> {
+                Settings.Secure.getInt(it.contentResolver, Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 0) != 0
+            }
+            else -> false
+        }
     }
+    return false
   }
 }
